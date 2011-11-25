@@ -32,7 +32,8 @@
 				hoverpause: false,
 				pager: true,
 				nav: true, //reserved
-				keynav: true
+				keynav: true,
+				crop : true
 			}
 			var options =  $.extend(defaults, options);
  
@@ -90,14 +91,15 @@
 				var rotate = function(){
 					//fade out current slide and remove active class,
 					//fade in next slide and add active class
-					slides.eq(current).fadeOut(o.duration).removeClass('active')
+					slides
+						.eq(current).fadeOut(o.duration).removeClass('active')
 						.end().eq(next).fadeIn(o.duration).addClass('active').queue(function(){
 							//add rotateTimer function to end of animation queue
 							//this prevents animation buildup caused by requestAnimationFrame
 							//rotateTimer starts a timer for the next rotate
 							rotateTimer();
 							$(this).dequeue()
-					});
+						});
 
 					//update pager to reflect slide change
 					if(pager){
@@ -138,6 +140,12 @@
 					cropHeight = Math.floor(((sliderWidth/imgRatio)/o.lineheight))*o.lineheight;
 
 					$('.slides', obj).css({height: cropHeight});
+					if(!o.crop){
+						$('.slides img', obj).css({
+							'width' : sliderWidth,
+							'height' : Math.floor(sliderWidth/imgRatio)
+						});
+					}
 				};
 				setsize();
 
